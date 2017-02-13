@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Books
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
+            List<Book> books = Book.GetSomeBooks();
+            books.ShowBooks();
         }
     }
 }
