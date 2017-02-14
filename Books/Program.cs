@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Books
@@ -12,6 +13,7 @@ namespace Books
         {
             List<Book> books = Book.GetSomeBooks();
             books.ShowBooks();
+            Thread.Sleep(5000);
         }
     }
 }
