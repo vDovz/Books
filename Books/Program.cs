@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Books
 {
@@ -12,8 +13,11 @@ namespace Books
         static void Main(string[] args)
         {
             List<Book> books = Book.GetSomeBooks();
-            books.ShowBooks();
-            Thread.Sleep(5000);
+            List<Journal> journals = Journal.GetSomeJournals();
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Form(books, journals));
         }
     }
 }
