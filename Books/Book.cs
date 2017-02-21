@@ -10,7 +10,7 @@ namespace Books
     {
         public string Title { get; set; }
 
-        public string Author { get; set; }
+        public  List<Author> Authors { get; set; }
 
         public int Year { get; set; }
 
@@ -18,14 +18,54 @@ namespace Books
         {
             List<Book> books = new List<Book>()
             {
-                new Book() { Title = "Book1" , Author = "Author1" , Year = 1998},
-                new Book() { Title = "Book2" , Author = "Author2" , Year = 1992},
-                new Book() { Title = "Book3" , Author = "Author3" , Year = 1966},
-                new Book() { Title = "Book4" , Author = "Author1" , Year = 1912},
-                new Book() { Title = "Book5" , Author = "Author2" , Year = 1923},
-                new Book() { Title = "Book6" , Author = "Author5" , Year = 1945},
+                new Book() { Title = "Book1" ,
+                    Authors = new List<Author>() {
+                    new Author() { Name  ="King" },
+                    new Author() { Name  ="Mayer"  },
+                    new Author() { Name  ="Palanick"}
+                    },
+                    Year = 1998},
+
+                new Book() { Title = "Book2" ,
+                    Authors = new List<Author>() {
+                    new Author() { Name  ="Pushkin"},
+                    },
+                    Year = 1992},
+
+                new Book() { Title = "Book3" ,
+                    Authors = new List<Author>() {
+                    new Author() { Name  ="Remark"  },
+                    new Author() { Name  ="Hoking"  },
+                    },
+                    Year = 1966},
+
+                new Book() { Title = "Book4" ,
+                    Authors = new List<Author>() {
+                    new Author() { Name  ="Dostoevskiy" },
+                    new Author() { Name  ="Tolstoi"  },
+                    },
+                    Year = 1912},
+
+                new Book() { Title = "Book5" ,
+                    Authors = new List<Author>() {
+                    new Author() { Name  ="King" },
+                    new Author() { Name  ="Pushkin" },
+                    },
+                    Year = 1923},
+
+                new Book() { Title = "Book6" ,
+                    Authors = new List<Author>() {
+                    new Author() { Name  ="King" }
+                    },
+                    Year = 1945},
             };
             return books;
+        }
+
+        public static List<Book> FilterByAuthor(List<Book> allbooks, string author)
+        {
+            List<Book> result = allbooks.Where((b) => b.Authors.Contains(new Author() { Name = author })).ToList();
+            return result;
         }
     }
 }

@@ -12,17 +12,18 @@ namespace Books
 {
     public partial class Form : System.Windows.Forms.Form
     {
-        public Form(List<Book> books, List<Journal> journals)
+        public Form(List<Book> books, List<Journal> journals, List<Newspaper> newspapers)
         {
             InitializeComponent();
-            gridBooks.ShowBooks(books);
-            gridJournals.ShowJournals(journals);
+            gridBooks.ShowAllBooks(books);
+            gridJournals.ShowAllJournals(journals);
+            gridNewspapers.ShowAllNewspaper(newspapers);
         }
 
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void btnSearch_Click(object sender, EventArgs e)
         {
-
+            
+            gridBooks.ShowBooksByAuthor(Book.GetSomeBooks(), textAuthorSearch.Text);
         }
     }
 }
