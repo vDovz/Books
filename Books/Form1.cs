@@ -24,6 +24,8 @@ namespace Books
         {
             
             gridBooks.ShowBooksByAuthor(Book.GetSomeBooks(), textAuthorSearch.Text);
+            gridJournals.ShowJournalsByAuthor(Journal.GetSomeJournals(), textAuthorSearch.Text);
+            gridNewspapers.ShowNewspaperByAuthor(Newspaper.GetSomeNewspaper(), textAuthorSearch.Text);
         }
     }
 }

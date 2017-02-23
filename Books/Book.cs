@@ -62,10 +62,6 @@ namespace Books
             return books;
         }
 
-        public static List<Book> FilterByAuthor(List<Book> allbooks, string author)
-        {
-            List<Book> result = allbooks.Where((b) => b.Authors.Contains(new Author() { Name = author })).ToList();
-            return result;
-        }
+
     }
 }

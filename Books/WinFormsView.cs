@@ -11,6 +11,7 @@ namespace Books
     {
         public static void ShowAllBooks(this DataGridView grid, List<Book> books)
         {
+            grid.Rows.Clear();
             for (int i = 0; i < books.Count; i++)
             {
                 grid.Rows.Add();
@@ -25,11 +26,12 @@ namespace Books
 
         public static void ShowAllJournals(this DataGridView grid, List<Journal> journals)
         {
+            grid.Rows.Clear();
             for (int i = 0; i < journals.Count; i++)
             {
                 grid.Rows.Add();
                 grid.Rows[i].Cells[0].Value = journals[i].BrandName;
-                grid.Rows[i].Cells[1].Value = journals[i].MainTheme;
+                grid.Rows[i].Cells[1].Value = journals[i].Title;
                 grid.Rows[i].Cells[2].Value = journals[i].Number;
                 grid.Rows[i].Cells[3].Value = journals[i].Date;
             }
@@ -37,6 +39,7 @@ namespace Books
 
         public static void ShowAllNewspaper(this DataGridView grid, List<Newspaper> newspapers)
         {
+            grid.Rows.Clear();
             for (int i = 0; i < newspapers.Count; i++)
             {
                 grid.Rows.Add();
@@ -48,9 +51,20 @@ namespace Books
 
         public static void ShowBooksByAuthor(this DataGridView grid, List<Book> allbooks, string author)
         {
-            grid.Rows.Clear();
-            var result = Book.FilterByAuthor(allbooks, author);
+            var result = allbooks.FilterByAuthor(author);
             ShowAllBooks(grid, result);
+        }
+
+        public static void ShowJournalsByAuthor(this DataGridView grid, List<Journal> journals, string author)
+        {
+            var result = journals.FilterByAuthor(author);
+            ShowAllJournals(grid, result);
+        }
+
+        public static void ShowNewspaperByAuthor(this DataGridView grid, List<Newspaper> newspaper, string author)
+        {
+            var result = newspaper.FilterByAuthor(author);
+            ShowAllNewspaper(grid, result);
         }
     }
 }
