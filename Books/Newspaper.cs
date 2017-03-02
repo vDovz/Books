@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,32 @@ namespace Books
                 new Newspaper() { Title = "TitleName5" , Number = 5 , Date = new DateTime(2017,10,16), Articles = new List<Article>() { new Article() { Authors = new List<Author>() { new Author() { Name = "King"} } } }}
             };
             return result;
+        }
+
+        public void AddToFile(string path)
+        {
+            string res = "";
+            string articles = "";
+            res += string.Format("{0},{1},{2};", Title, Number, Date);
+            for (int i = 0; i < Articles.Count; i++)
+            {
+                articles += Articles[i].Title + ",";
+                articles += Articles[i].Content + ",";
+                for (int j = 0; j < Articles[i].Authors.Count; j++)
+                {
+                    if (j != Articles[i].Authors.Count - 1)
+                    {
+                        articles += Articles[i].Authors[j].Name = ",";
+                    }
+                    else
+                    {
+                        articles += Articles[i].Authors[j].Name;
+                    }
+                }
+                articles += ";";
+            }
+            res += articles + Environment.NewLine;
+            File.AppendAllText(path,res);
         }
     }
 }

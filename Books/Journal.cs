@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Books
 {
+    [Serializable]
     public class Journal : Press
     {
         public string BrandName { get; set; }

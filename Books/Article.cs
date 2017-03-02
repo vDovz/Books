@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Books
 {
+    [Serializable]
     public class Article
     {
         public string Title { get; set; }

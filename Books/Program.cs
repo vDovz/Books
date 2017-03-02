@@ -18,7 +18,7 @@ namespace Books
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form(books, journals, newspapers));
+            Application.Run(new MainForm());
         }
     }
 }
