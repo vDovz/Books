@@ -9,9 +9,10 @@ namespace Books
     public class Book
     {
         public int Id { get; set; }
+
         public string Title { get; set; }
 
-        public  List<Author> Authors { get; set; }
+        public virtual List<Author> Authors { get; set; }
 
         public int Year { get; set; }
 
@@ -63,6 +64,28 @@ namespace Books
             return books;
         }
 
+        public bool AddValues(string title, string year)
+        {
+            Title = title;
+            try
+            {
+                Year = int.Parse(year);
+            }
+            catch
+            {
+                return false;
+            }
+            Authors = new List<Author>();
+            return true;
+        }
 
+        public void BookAssignAuthors(List<Author> authors)
+        {
+            foreach (var item in authors)
+            {
+                Authors.Add(item);
+                item.Books.Add(this);
+            }
+        }
     }
 }

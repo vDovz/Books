@@ -21,5 +21,25 @@ namespace Books
             return result;
         }
 
+        public bool AddValues(string name, string title, string number, string date)
+        {
+            int num;
+            DateTime d;
+            try
+            {
+                num = int.Parse(number);
+                d = DateTime.Parse(date);
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+            BrandName = name;
+            Title = title;
+            Number = num;
+            Date = d;
+            Articles = new List<Article>();
+            return true;
+        }
     }
 }

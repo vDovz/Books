@@ -47,5 +47,25 @@ namespace Books
             res += articles + Environment.NewLine;
             File.AppendAllText(path,res);
         }
+
+        public bool AddValues(string title, string number, string date)
+        {
+            int num;
+            DateTime d;
+            try
+            {
+                num = int.Parse(number);
+                d = DateTime.Parse(date);
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+            Title = title;
+            Number = num;
+            Date = d;
+            Articles = new List<Article>();
+            return true;
+        }
     }
 }

@@ -15,5 +15,6 @@ namespace Books
         public DateTime Date { get; set; }
 
         public List<Article> Articles { get; set; }
+
     }
 }

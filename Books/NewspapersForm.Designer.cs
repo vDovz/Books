@@ -28,26 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnAddToFile = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
             this.txtSearxh = new System.Windows.Forms.TextBox();
             this.grdNewspaper = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtTitle = new System.Windows.Forms.TextBox();
+            this.txtDate = new System.Windows.Forms.TextBox();
+            this.txtNumber = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnEdit = new System.Windows.Forms.Button();
+            this.btnRemove = new System.Windows.Forms.Button();
+            this.btnShowAll = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.grdNewspaper)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnAdd
+            // btnAddToFile
             // 
-            this.btnAdd.Location = new System.Drawing.Point(207, 506);
-            this.btnAdd.Margin = new System.Windows.Forms.Padding(6);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(141, 55);
-            this.btnAdd.TabIndex = 15;
-            this.btnAdd.Text = "AddToFile";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.button1_Click);
+            this.btnAddToFile.Location = new System.Drawing.Point(461, 506);
+            this.btnAddToFile.Margin = new System.Windows.Forms.Padding(6);
+            this.btnAddToFile.Name = "btnAddToFile";
+            this.btnAddToFile.Size = new System.Drawing.Size(141, 55);
+            this.btnAddToFile.TabIndex = 15;
+            this.btnAddToFile.Text = "Add all to file";
+            this.btnAddToFile.UseVisualStyleBackColor = true;
+            this.btnAddToFile.Click += new System.EventHandler(this.button1_Click);
             // 
             // btnSearch
             // 
@@ -96,12 +106,111 @@
             this.Column3.HeaderText = "Date";
             this.Column3.Name = "Column3";
             // 
+            // txtTitle
+            // 
+            this.txtTitle.Location = new System.Drawing.Point(384, 45);
+            this.txtTitle.Name = "txtTitle";
+            this.txtTitle.Size = new System.Drawing.Size(290, 29);
+            this.txtTitle.TabIndex = 16;
+            // 
+            // txtDate
+            // 
+            this.txtDate.Location = new System.Drawing.Point(384, 184);
+            this.txtDate.Name = "txtDate";
+            this.txtDate.Size = new System.Drawing.Size(290, 29);
+            this.txtDate.TabIndex = 17;
+            // 
+            // txtNumber
+            // 
+            this.txtNumber.Location = new System.Drawing.Point(384, 111);
+            this.txtNumber.Name = "txtNumber";
+            this.txtNumber.Size = new System.Drawing.Size(290, 29);
+            this.txtNumber.TabIndex = 18;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(383, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 24);
+            this.label1.TabIndex = 19;
+            this.label1.Text = "Title";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(380, 84);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(79, 24);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "Number";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(380, 157);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(48, 24);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Date";
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Location = new System.Drawing.Point(384, 237);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(89, 45);
+            this.btnAdd.TabIndex = 22;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Location = new System.Drawing.Point(479, 237);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(98, 45);
+            this.btnEdit.TabIndex = 23;
+            this.btnEdit.Text = "Edit";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.button2_Click_1);
+            // 
+            // btnRemove
+            // 
+            this.btnRemove.Location = new System.Drawing.Point(583, 237);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(91, 45);
+            this.btnRemove.TabIndex = 24;
+            this.btnRemove.Text = "Remove";
+            this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // btnShowAll
+            // 
+            this.btnShowAll.Location = new System.Drawing.Point(206, 506);
+            this.btnShowAll.Margin = new System.Windows.Forms.Padding(6);
+            this.btnShowAll.Name = "btnShowAll";
+            this.btnShowAll.Size = new System.Drawing.Size(142, 55);
+            this.btnShowAll.TabIndex = 25;
+            this.btnShowAll.Text = "Show All";
+            this.btnShowAll.UseVisualStyleBackColor = true;
+            this.btnShowAll.Click += new System.EventHandler(this.btnShowAll_Click);
+            // 
             // NewspapersForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(368, 576);
+            this.ClientSize = new System.Drawing.Size(704, 576);
+            this.Controls.Add(this.btnShowAll);
+            this.Controls.Add(this.btnRemove);
+            this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnAdd);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtNumber);
+            this.Controls.Add(this.txtDate);
+            this.Controls.Add(this.txtTitle);
+            this.Controls.Add(this.btnAddToFile);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearxh);
             this.Controls.Add(this.grdNewspaper);
@@ -117,12 +226,22 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnAddToFile;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox txtSearxh;
         private System.Windows.Forms.DataGridView grdNewspaper;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.TextBox txtTitle;
+        private System.Windows.Forms.TextBox txtDate;
+        private System.Windows.Forms.TextBox txtNumber;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.Button btnRemove;
+        private System.Windows.Forms.Button btnShowAll;
     }
 }

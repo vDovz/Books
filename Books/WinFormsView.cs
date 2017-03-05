@@ -15,12 +15,16 @@ namespace Books
             for (int i = 0; i < books.Count; i++)
             {
                 grid.Rows.Add();
-                grid.Rows[i].Cells[0].Value = books[i].Title;
-                foreach (var item in books[i].Authors)
+                grid.Rows[i].Cells[0].Value = books[i].Id;
+                grid.Rows[i].Cells[1].Value = books[i].Title;
+                if (books[i].Authors != null)
                 {
-                    grid.Rows[i].Cells[1].Value += item.Name +",";
+                    foreach (var item in books[i].Authors)
+                    {
+                        grid.Rows[i].Cells[2].Value += item.Name + ",";
+                    }
                 }
-                grid.Rows[i].Cells[2].Value = books[i].Year;
+                grid.Rows[i].Cells[3].Value = books[i].Year;
             }
         }
 
