@@ -58,7 +58,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppContext.cs" />
     <Compile Include="Article.cs" />
     <Compile Include="Author.cs" />
     <Compile Include="Book.cs" />

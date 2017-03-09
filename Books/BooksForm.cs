@@ -7,38 +7,30 @@ namespace Books
 {
     public partial class BooksForm : Form
     {
-        AppContext db = new AppContext();
 
         public BooksForm(List<Book> books)
         {
             InitializeComponent();
-            var book = db.Books.Find(4);
-            grdBook.ShowAllBooks(db.Books.ToList());
+            grdBook.ShowAllBooks(Book.GetAllBooksFromDb());
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            grdBook.ShowBooksByAuthor(db.Books.Include("Authors").ToList(), txtSearch.Text);
+            grdBook.ShowBooksByAuthor(Book.GetAllBooksFromDb(), txtSearch.Text);
         }
 
         private void btnAddBook_Click(object sender, EventArgs e)
         {
             string[] Authors = txtAuthors.Text.Split(',');
             Book book = new Book();
-            if (ChecKEmptyField())
+            if (!CheckField())
             {
-                MessageBox.Show("Edit field can't be empty");
+                MessageBox.Show("Incorrect argument.");
                 return;
             }
-            if (!book.AddValues(txtTitle.Text, txtYear.Text))
-            {
-                MessageBox.Show("You write incorrect argument. Try again");
-                return;
-            }
-            book.BookAssignAuthors(GetAuthors(Authors));
-            db.Books.Add(book);
-            db.SaveChanges();
-            grdBook.ShowAllBooks(db.Books.ToList());
+            int bookId = Book.AddBookToDB(txtTitle.Text, int.Parse(txtYear.Text));
+            Book.AssignBookToAuthorDB(bookId, Authors);
+            grdBook.ShowAllBooks(Book.GetAllBooksFromDb());
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -50,10 +42,8 @@ namespace Books
                 return;
             }
             int id = (int)grdBook.Rows[index].Cells[0].Value;
-            Book book = db.Books.Find(id);
-            db.Books.Remove(book);
-            db.SaveChanges();
-            grdBook.ShowAllBooks(db.Books.ToList());
+            Book.RemoveBook(id);
+            grdBook.ShowAllBooks(Book.GetAllBooksFromDb());
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -64,55 +54,41 @@ namespace Books
                 MessageBox.Show("Select row to edit");
                 return;
             }
-            if (ChecKEmptyField())
+            if (!CheckField())
             {
-                MessageBox.Show("Edit field can't be empty");
+                MessageBox.Show("Incorrect argument.");
                 return;
             }
             int id = (int)grdBook.Rows[index].Cells[0].Value;
-            Book book = db.Books.Find(id);
-            if (!book.AddValues(txtTitle.Text, txtYear.Text))
-            {
-                MessageBox.Show("You write incorrect argument. Try again");
-                return;
-            }
-            string[] Authors = txtAuthors.Text.Split(',');
-            book.BookAssignAuthors(GetAuthors(Authors));
-            db.SaveChanges();
-            grdBook.ShowAllBooks(db.Books.ToList());
+            string[] authors = txtAuthors.Text.Split(',');
+            Book.EditBook(id, txtTitle.Text, int.Parse(txtYear.Text));
+            Book.AssignBookToAuthorDB(id, authors);
+            grdBook.ShowAllBooks(Book.GetAllBooksFromDb());
         }
 
-        private bool ChecKEmptyField()
+        private void btnAllBooks_Click(object sender, EventArgs e)
+        {
+            grdBook.ShowAllBooks(Book.GetAllBooksFromDb());
+        }
+
+        private bool CheckField()
         {
             if (string.IsNullOrWhiteSpace(txtTitle.Text)
                 || string.IsNullOrWhiteSpace(txtAuthors.Text)
                 || string.IsNullOrWhiteSpace(txtYear.Text))
             {
-                return true;
+                return false;
             }
-            return false;
-        }
-
-        private Author GetAuthor(string name)
-        {
-            Author author = db.Authors.FirstOrDefault(a => a.Name == name);
-            if (author == null)
+            try
             {
-                author = new Author() { Name = name, Books = new List<Book>() };
-                db.Authors.Add(author);
+                int.Parse(txtYear.Text);
             }
-            return author;
-        }
-
-        private List<Author> GetAuthors(string[] Authors)
-        {
-            List<Author> result = new List<Author>();
-            foreach (var item in Authors)
+            catch
             {
-                result.Add(GetAuthor(item));
+                return false;
             }
-            return result;
-        }
 
+            return true;
+        }
     }
 }

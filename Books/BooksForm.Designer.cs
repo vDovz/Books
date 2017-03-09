@@ -179,6 +179,7 @@
             this.btnAllBooks.TabIndex = 11;
             this.btnAllBooks.Text = "All Books";
             this.btnAllBooks.UseVisualStyleBackColor = true;
+            this.btnAllBooks.Click += new System.EventHandler(this.btnAllBooks_Click);
             // 
             // btnRemove
             // 
