@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Books.Presenter;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,20 +20,20 @@ namespace Books
 
         private void btnBook_Click(object sender, EventArgs e)
         {
-            BooksForm fr = new BooksForm(Book.GetSomeBooks());
-            fr.Show();
+            BookPresenter pres = new BookPresenter(new BooksForm(), new Book());
+            pres.Run();
         }
 
         private void btnJournal_Click(object sender, EventArgs e)
         {
-            JournalsForm fr = new JournalsForm(Journal.GetSomeJournals());
-            fr.Show();
+            JournalPresenter pres = new JournalPresenter(new JournalsForm(), Journal.GetSomeJournals());
+            pres.Run();
         }
 
         private void btnNewspaper_Click(object sender, EventArgs e)
         {
-            NewspapersForm fr = new NewspapersForm(Newspaper.GetSomeNewspaper());
-            fr.Show();
+            NewspaperPresenter pres = new NewspaperPresenter(new NewspapersForm(), Newspaper.GetSomeNewspaper());
+            pres.Run();
         }
     }
 }

@@ -16,5 +16,11 @@ namespace Books
 
         public List<Article> Articles { get; set; }
 
+        public static List<T> FilterByAuthor<T>(List<T> allPress, string name) where T : Press
+        {
+            List<T> result = allPress.Where((b) => b.Articles.Any((a) => a.Authors.Any((at) => at.Name == name))).ToList();
+            return result;
+        }
+
     }
 }

@@ -178,5 +178,11 @@ namespace Books
                 command.ExecuteNonQuery();
             }
         }
+
+        public static List<Book> FilterByAuthor(List<Book> allbooks, string author)
+        {
+            List<Book> result = allbooks.Where((b) => b.Authors.Any((a) => a.Name == author)).ToList();
+            return result;
+        }
     }
 }

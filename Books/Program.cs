@@ -15,7 +15,6 @@ namespace Books
             List<Book> books = Book.GetSomeBooks();
             List<Journal> journals = Journal.GetSomeJournals();
             List<Newspaper> newspapers = Newspaper.GetSomeNewspaper();
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
