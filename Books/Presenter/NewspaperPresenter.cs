@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Books.Model;
+using Books.View;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,82 +11,75 @@ namespace Books.Presenter
 {
     class NewspaperPresenter
     {
-        private NewspapersForm _form;
+        private INewspaperView _view;
+
+        private NewspaperModel _newspaperModel;
 
         private List<Newspaper> _newspapers;
 
-        public NewspaperPresenter(NewspapersForm form, List<Newspaper> newspapers)
+        public NewspaperPresenter(INewspaperView view)
         {
-            _form = form;
-            _newspapers = newspapers;
-            _form.AddButtonPress += Add;
-            _form.UpdateGrid += Show;
-            _form.RemoveButtonPress += Remove;
-            _form.EditButtonPress += Edit;
-            _form.SearchButtonPress += Filter;
-            _form.SaveButtonPress += () => Save();
-        }
-        public void Run()
-        {
-            _form.Show();
+            _view = view;
+            _newspaperModel = new NewspaperModel();
+            _newspapers = _newspaperModel.GetSomeNewspaper();
         }
 
-        private void Save()
+        public void Save()
         {
             foreach (var item in _newspapers)
             {
-                item.AddToFile("newspaper.txt");
+                _newspaperModel.AddToFile(item, "newspaper.txt");
             }
         }
 
-        private void Filter(DataGridView grd, string name)
+        public void Filter()
         {
-            ShowNewspaperByAuthor(grd, _newspapers, name);
+            ShowNewspaperByAuthor(_view.Grid, _newspapers, _view.Search);
         }
 
-        private void Edit(DataGridView grd, string title, string number, string date)
+        public void Edit()
         {
-            int index = grd.CurrentRow.Index;
+            int index = _view.Grid.CurrentRow.Index;
             if (index == -1)
             {
-                _form.ShowErrors("You must select row");
+                _view.ShowErrors("You must select row");
                 return;
             }
-            if (!_newspapers[index].AddValues(title, number, date))
+            if (!_newspaperModel.AddValues(_newspapers[index],_view.Title, _view.Number, _view.Date))
             {
-                _form.ShowErrors("Incorrect arguments. Try again");
+                _view.ShowErrors("Incorrect arguments. Try again");
                 return;
             }
         }
 
-        private void Remove(DataGridView grd)
+        public void Remove()
         {
-            int index = grd.CurrentRow.Index;
+            int index = _view.Grid.CurrentRow.Index;
             if (index == -1)
             {
-                _form.ShowErrors("You must select row");
+                _view.ShowErrors("You must select row");
                 return;
             }
             _newspapers.RemoveAt(index);
         }
 
-        private void Show(DataGridView grd)
+        public void Show()
         {
-            ShowAllNewspaper(grd, _newspapers);
+            ShowAllNewspaper(_view.Grid, _newspapers);
         }
 
-        private void Add(string title, string number, string date)
+        public void Add()
         {
             Newspaper nw = new Newspaper();
-            if (!nw.AddValues(title, number, date))
+            if (!_newspaperModel.AddValues(nw, _view.Title, _view.Number, _view.Date))
             {
-                _form.ShowErrors("Values not correct");
+                _view.ShowErrors("Values not correct");
                 return;
             }
             _newspapers.Add(nw);
         }
 
-        public static void ShowAllNewspaper(DataGridView grid, List<Newspaper> newspapers)
+        public void ShowAllNewspaper(DataGridView grid, List<Newspaper> newspapers)
         {
             grid.Rows.Clear();
             for (int i = 0; i < newspapers.Count; i++)
@@ -96,9 +91,9 @@ namespace Books.Presenter
             }
         }
 
-        public static void ShowNewspaperByAuthor(DataGridView grid, List<Newspaper> newspapers, string author)
+        public  void ShowNewspaperByAuthor(DataGridView grid, List<Newspaper> newspapers, string author)
         {
-            var result = Press.FilterByAuthor(newspapers, author);
+            var result = _newspaperModel.FilterByAuthor(newspapers, author);
             ShowAllNewspaper(grid, result);
         }
     }

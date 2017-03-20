@@ -20,20 +20,20 @@ namespace Books
 
         private void btnBook_Click(object sender, EventArgs e)
         {
-            BookPresenter pres = new BookPresenter(new BooksForm(), new Book());
-            pres.Run();
+            BooksForm form = new BooksForm();
+            form.Show();
         }
 
         private void btnJournal_Click(object sender, EventArgs e)
         {
-            JournalPresenter pres = new JournalPresenter(new JournalsForm(), Journal.GetSomeJournals());
-            pres.Run();
+            JournalsForm form = new JournalsForm();
+            form.Show();
         }
 
         private void btnNewspaper_Click(object sender, EventArgs e)
         {
-            NewspaperPresenter pres = new NewspaperPresenter(new NewspapersForm(), Newspaper.GetSomeNewspaper());
-            pres.Run();
+            NewspapersForm form = new NewspapersForm();
+            form.Show();
         }
     }
 }

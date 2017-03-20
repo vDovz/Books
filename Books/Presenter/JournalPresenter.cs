@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Books.Model;
+using Books.View;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,28 +13,20 @@ namespace Books.Presenter
 {
     class JournalPresenter
     {
-        private JournalsForm _form;
+        private IJournalView _view;
+
+        private JournalModel _journalModel;
 
         private List<Journal> _journals;
 
-        public JournalPresenter(JournalsForm form, List<Journal> journals)
+        public JournalPresenter(IJournalView view)
         {
-            _journals = journals;
-            _form = form;
-            _form.AddButtonPress += Add;
-            _form.UpdateGrid += Show;
-            _form.RemoveButtonPress += Remove;
-            _form.EditButtonPress += Edit;
-            _form.SearchButtonPress += Filter;
-            _form.SaveButtonPress += () => Save();
+            _view = view;
+            _journalModel = new JournalModel();
+            _journals = _journalModel.GetSomeJournals();
         }
 
-        public void Run()
-        {
-            _form.Show();
-        }
-
-        private void Save()
+        public void Save()
         {
             XmlSerializer sr = new XmlSerializer(typeof(List<Journal>));
             using (FileStream fs = new FileStream("journals.xml", FileMode.OpenOrCreate))
@@ -41,49 +35,52 @@ namespace Books.Presenter
             }
         }
 
-        private void Filter(DataGridView grd, string name)
+        public void Filter()
         {
-            ShowJournalsByAuthor(grd , _journals, name);
+            ShowJournalsByAuthor(_view.Grid , _journals, _view.JournalName);
         }
 
-        private void Edit(DataGridView grd, string name, string title, string number, string date)
+        public void Edit()
         {
-            var index = grd.CurrentRow.Index;
-            if (!_journals[index].AddValues(name, title, number, date))
+            var index = _view.Grid.CurrentRow.Index;
+            if (!_journalModel.AddValues(_journals[index],_view.JournalName, _view.Title, _view.Number, _view.Date))
             {
-                _form.ShowErrors("You write incorrect argument. Try again");
+                _view.ShowErrors("You write incorrect argument. Try again");
                 return;
             }
+            Show();
         }
 
-        private void Remove(DataGridView grd)
+        public void Remove()
         {
-            var index = grd.CurrentRow.Index;
+            var index = _view.Grid.CurrentRow.Index;
             if (index == -1)
             {
-                _form.ShowErrors("Select row to remove");
+                _view.ShowErrors("Select row to remove");
                 return;
             }
             _journals.RemoveAt(index);
+            Show();
         }
 
-        private void Show(DataGridView grd)
+        public void Show()
         {
-            ShowAllJournals(grd , _journals);
+            ShowAllJournals(_view.Grid , _journals);
         }
 
-        private void Add(string name, string title, string number, string date)
+        public void Add()
         {
             Journal journal = new Journal();
-            if (!journal.AddValues(name, title, number, date))
+            if (!_journalModel.AddValues(journal, _view.JournalName, _view.Title, _view.Number, _view.Date))
             {
-                _form.ShowErrors("You write incorrect argument. Try again");
+                _view.ShowErrors("You write incorrect argument. Try again");
                 return;
             }
             _journals.Add(journal);
+            Show();
         }
 
-        private void ShowAllJournals(DataGridView grid, List<Journal> journals)
+        public void ShowAllJournals(DataGridView grid, List<Journal> journals)
         {
             grid.Rows.Clear();
             for (int i = 0; i < journals.Count; i++)
@@ -96,9 +93,9 @@ namespace Books.Presenter
             }
         }
 
-        private void ShowJournalsByAuthor(DataGridView grid, List<Journal> journals, string author)
+        public void ShowJournalsByAuthor(DataGridView grid, List<Journal> journals, string author)
         {
-            var result = Press.FilterByAuthor(journals, author);
+            var result = _journalModel.FilterByAuthor(journals, author);
             ShowAllJournals(grid, result);
         }
     }

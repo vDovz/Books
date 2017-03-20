@@ -1,76 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 
-namespace Books
+namespace Books.Model
 {
-    public class Book
+    class BookModel
     {
         private static string _connectionString = "Data Source = ADMIN-ПК; Initial Catalog = Books; Integrated Security=true;";
 
-        public int Id { get; set; }
-
-        public string Title { get; set; }
-
-        public List<Author> Authors { get; set; }
-
-        public int Year { get; set; }
-
-        public static List<Book> GetSomeBooks()
+        public List<Book> GetAllBooksFromDb()
         {
-            List<Book> books = new List<Book>()
-            {
-                new Book() { Title = "Book1" ,
-                    Authors = new List<Author>() {
-                    new Author() { Name  ="King" },
-                    new Author() { Name  ="Mayer"  },
-                    new Author() { Name  ="Palanick"}
-                    },
-                    Year = 1998},
-
-                new Book() { Title = "Book2" ,
-                    Authors = new List<Author>() {
-                    new Author() { Name  ="Pushkin"},
-                    },
-                    Year = 1992},
-
-                new Book() { Title = "Book3" ,
-                    Authors = new List<Author>() {
-                    new Author() { Name  ="Remark"  },
-                    new Author() { Name  ="Hoking"  },
-                    },
-                    Year = 1966},
-
-                new Book() { Title = "Book4" ,
-                    Authors = new List<Author>() {
-                    new Author() { Name  ="Dostoevskiy" },
-                    new Author() { Name  ="Tolstoi"  },
-                    },
-                    Year = 1912},
-
-                new Book() { Title = "Book5" ,
-                    Authors = new List<Author>() {
-                    new Author() { Name  ="King" },
-                    new Author() { Name  ="Pushkin" },
-                    },
-                    Year = 1923},
-
-                new Book() { Title = "Book6" ,
-                    Authors = new List<Author>() {
-                    new Author() { Name  ="King" }
-                    },
-                    Year = 1945},
-            };
-            return books;
-        }
-
-        public static List<Book> GetAllBooksFromDb()
-        {
-            List <Book> result =new List<Book>();
-            using(SqlConnection connection = new SqlConnection(_connectionString))
+            List<Book> result = new List<Book>();
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 var command = connection.CreateCommand();
@@ -80,7 +24,7 @@ namespace Books
                 {
                     while (reader.Read())
                     {
-                        result.Add(new Book() { Id = (int)reader[0], Title = (string)reader[1], Year = (int)reader[2], Authors = new List<Author>()});
+                        result.Add(new Book() { Id = (int)reader[0], Title = (string)reader[1], Year = (int)reader[2], Authors = new List<Author>() });
                     }
                 }
                 foreach (var item in result)
@@ -102,7 +46,7 @@ namespace Books
             }
         }
 
-        public static int AddBookToDB(string title, int year)
+        public int AddBookToDB(string title, int year)
         {
             int id;
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -116,7 +60,7 @@ namespace Books
             return id;
         }
 
-        public static void AssignBookToAuthorDB(int bookId, int authorId)
+        public void AssignBookToAuthorDB(int bookId, int authorId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -128,14 +72,14 @@ namespace Books
             }
         }
 
-        public static void AssignBookToAuthorDB(int bookId, string[] authors )
+        public void AssignBookToAuthorDB(int bookId, string[] authors)
         {
             foreach (var item in authors)
             {
-                var author = Author.GetAuthor(item);
+                var author = AuthorModel.GetAuthor(item);
                 if (author.Name == null)
                 {
-                    int authorId = Author.AddAuthorToDb(item);
+                    int authorId = AuthorModel.AddAuthorToDb(item);
                     AssignBookToAuthorDB(bookId, authorId);
                 }
                 else
@@ -145,7 +89,7 @@ namespace Books
             }
         }
 
-        public static void RemoveBook(int id)
+        public void RemoveBook(int id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -162,7 +106,7 @@ namespace Books
 
         }
 
-        public static void EditBook(int id, string title, int year)
+        public void EditBook(int id, string title, int year)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -179,10 +123,11 @@ namespace Books
             }
         }
 
-        public static List<Book> FilterByAuthor(List<Book> allbooks, string author)
+        public List<Book> FilterByAuthor(List<Book> allbooks, string author)
         {
             List<Book> result = allbooks.Where((b) => b.Authors.Any((a) => a.Name == author)).ToList();
             return result;
         }
+
     }
 }

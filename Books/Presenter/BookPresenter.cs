@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Books.Model;
+using Books.View;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,66 +11,62 @@ namespace Books.Presenter
 {
     class BookPresenter
     {
-        private BooksForm _form;
+        private IBookView _view;
 
-        public BookPresenter(BooksForm form)
+        private BookModel _bookModel;
+
+        public BookPresenter(IBookView view)
         {
-            _form = form;
-            _form.AddButtonPress += Add;
-            _form.UpdateGrid += Show;
-            _form.RemoveButtonPress += Remove;
-            _form.EditButtonPress += Edit;
-            _form.SearchButtonPress += Filter;  
+            _view = view;
+            _bookModel = new BookModel();
         }
 
-        public void Run()
+        public void Filter()
         {
-            _form.Show();
+            ShowBooksByAuthor(_view.Grid, _bookModel.GetAllBooksFromDb(), _view.Search);
         }
 
-        private void Filter(DataGridView grd, string name)
+        public void Edit()
         {
-            ShowBooksByAuthor(grd , Book.GetAllBooksFromDb(), name);
-        }
-
-        private void Edit(DataGridView grid, string authors, string title, string year)
-        {
-            var index = grid.CurrentRow.Index;
+            var index = _view.Grid.CurrentRow.Index;
             if (index == -1)
             {
-                _form.ShowErrors("Select row to remove");
+                _view.ShowErrors("Select row to remove");
                 return;
             }
-            int id = (int)grid.Rows[index].Cells[0].Value;
-            Book.EditBook(id, title, int.Parse(year));
-            Book.AssignBookToAuthorDB(id, authors.Split(','));
+            int id = (int)_view.Grid.Rows[index].Cells[0].Value;
+            _bookModel.EditBook(id, _view.Title, int.Parse(_view.Year));
+            _bookModel.AssignBookToAuthorDB(id, _view.Authors.Split(','));
+            Show();
         }
 
-        private void Remove(DataGridView grid)
+        public void Remove()
         {
-            var index = grid.CurrentRow.Index; if (index == -1)
+            var index = _view.Grid.CurrentRow.Index; if (index == -1)
             {
                 MessageBox.Show("Select row to remove");
                 return;
             }
-            int id = (int)grid.Rows[index].Cells[0].Value;
-            Book.RemoveBook(id);
+            int id = (int)_view.Grid.Rows[index].Cells[0].Value;
+            _bookModel.RemoveBook(id);
+            Show();
         }
 
-        private void Show(DataGridView grid)
+        public void Show()
         {
-            ShowAllBooks(grid, Book.GetAllBooksFromDb());
+            ShowAllBooks(_view.Grid, _bookModel.GetAllBooksFromDb());
         }
 
-        private void Add(string authors, string title, string year)
+        public void Add()
         {
 
             Book book = new Book();
-            int bookId = Book.AddBookToDB(title, int.Parse(year));
-            Book.AssignBookToAuthorDB(bookId, authors.Split(','));
+            int bookId = _bookModel.AddBookToDB(_view.Title, int.Parse(_view.Year));
+            _bookModel.AssignBookToAuthorDB(bookId, _view.Authors.Split(','));
+            Show();
         }
 
-        private void ShowAllBooks( DataGridView grid, List<Book> books)
+        public void ShowAllBooks( DataGridView grid, List<Book> books)
         {
             grid.Rows.Clear();
             for (int i = 0; i < books.Count; i++)
@@ -87,9 +85,9 @@ namespace Books.Presenter
             }
         }
 
-        private void ShowBooksByAuthor(DataGridView grid, List<Book> allbooks, string author)
+        public void ShowBooksByAuthor(DataGridView grid, List<Book> allbooks, string author)
         {
-            var result = Book.FilterByAuthor(allbooks, author);
+            var result = _bookModel.FilterByAuthor(allbooks, author);
             ShowAllBooks(grid, result);
         }
     }

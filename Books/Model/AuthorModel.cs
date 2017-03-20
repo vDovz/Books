@@ -1,35 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Books
+namespace Books.Model
 {
-    [Serializable]
-    public class Author
+    class AuthorModel
     {
         private static string _connectionString = "Data Source = ADMIN-ПК; Initial Catalog = Books; Integrated Security=true;";
-
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public List<Book> Books { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            Author at= (Author)obj;
-            return Name == at.Name;
-        }
-
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode();
-        }
 
         public static Author GetAuthor(string name)
         {
@@ -59,7 +39,8 @@ namespace Books
                 {
                     while (reader.Read())
                     {
-                        result.Books.Add(new Book {
+                        result.Books.Add(new Book
+                        {
                             Id = (int)reader[0],
                             Title = (string)reader[1],
                             Year = (int)reader[2]
@@ -79,7 +60,7 @@ namespace Books
                 var command = connection.CreateCommand();
                 command.CommandText = string.Format(@"Insert into Authors (Name) output INSERTED.ID
                                         Values ('{0}')", name);
-                id = (int) command.ExecuteScalar();
+                id = (int)command.ExecuteScalar();
             }
             return id;
         }

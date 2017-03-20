@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Books
+namespace Books.Model
 {
-    [Serializable]
-    public class Journal : Press
+    class JournalModel
     {
-        public string BrandName { get; set; }
-
-        public static List<Journal> GetSomeJournals()
+        public List<Journal> GetSomeJournals()
         {
             List<Journal> result = new List<Journal>()
             {
@@ -21,7 +21,7 @@ namespace Books
             return result;
         }
 
-        public bool AddValues(string name, string title, string number, string date)
+        public bool AddValues(Journal journal, string name, string title, string number, string date)
         {
             int num;
             DateTime d;
@@ -34,12 +34,18 @@ namespace Books
             {
                 return false;
             }
-            BrandName = name;
-            Title = title;
-            Number = num;
-            Date = d;
-            Articles = new List<Article>();
+            journal.BrandName = name;
+            journal.Title = title;
+            journal.Number = num;
+            journal.Date = d;
+            journal.Articles = new List<Article>();
             return true;
+        }
+
+        public List<Journal> FilterByAuthor(List<Journal> journals, string name) 
+        {
+            List<Journal> result = journals.Where((b) => b.Articles.Any((a) => a.Authors.Any((at) => at.Name == name))).ToList();
+            return result;
         }
     }
 }
