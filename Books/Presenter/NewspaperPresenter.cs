@@ -2,10 +2,12 @@
 using Books.View;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace Books.Presenter
 {
@@ -15,68 +17,92 @@ namespace Books.Presenter
 
         private NewspaperModel _newspaperModel;
 
-        private List<Newspaper> _newspapers;
-
         public NewspaperPresenter(INewspaperView view)
         {
             _view = view;
             _newspaperModel = new NewspaperModel();
-            _newspapers = _newspaperModel.GetSomeNewspaper();
         }
 
-        public void Save()
+        public void SaveToFile()
         {
-            foreach (var item in _newspapers)
+            foreach (var item in _newspaperModel.GetAllNewspapersFromDb())
             {
                 _newspaperModel.AddToFile(item, "newspaper.txt");
             }
         }
 
+        public void SaveToXML()
+        {
+            XmlSerializer sr = new XmlSerializer(typeof(List<Newspaper>));
+            using (FileStream fs = new FileStream("newspapers.xml", FileMode.OpenOrCreate))
+            {
+                sr.Serialize(fs, _newspaperModel.GetAllNewspapersFromDb());
+            }
+        }
+
         public void Filter()
         {
-            ShowNewspaperByAuthor(_view.Grid, _newspapers, _view.Search);
+            ShowNewspaperByAuthor(_view.Grid, _newspaperModel.GetAllNewspapersFromDb(), _view.Search);
         }
 
         public void Edit()
         {
-            int index = _view.Grid.CurrentRow.Index;
+            int number = 0;
+            DateTime date = new DateTime();
+            try
+            {
+                number = int.Parse(_view.Number);
+                date = DateTime.Parse(_view.Date);
+            }
+            catch
+            {
+                _view.ShowErrors("Incorrext argument");
+            }
+            var index = _view.Grid.CurrentRow.Index;
             if (index == -1)
             {
-                _view.ShowErrors("You must select row");
+                _view.ShowErrors("Select row to remove");
                 return;
             }
-            if (!_newspaperModel.AddValues(_newspapers[index],_view.Title, _view.Number, _view.Date))
-            {
-                _view.ShowErrors("Incorrect arguments. Try again");
-                return;
-            }
+            int id = (int)_view.Grid.Rows[index].Cells[0].Value;
+            _newspaperModel.EditNewspaper(id, _view.Title, number, date);
+            Show();
         }
 
         public void Remove()
         {
-            int index = _view.Grid.CurrentRow.Index;
+            var index = _view.Grid.CurrentRow.Index;
             if (index == -1)
             {
-                _view.ShowErrors("You must select row");
+                _view.ShowErrors("Select row to remove");
                 return;
             }
-            _newspapers.RemoveAt(index);
+            int id = (int)_view.Grid.Rows[index].Cells[0].Value;
+            _newspaperModel.RemoveNewspaper(id);
+            Show();
         }
 
         public void Show()
         {
-            ShowAllNewspaper(_view.Grid, _newspapers);
+            ShowAllNewspaper(_view.Grid, _newspaperModel.GetAllNewspapersFromDb());
         }
 
         public void Add()
         {
-            Newspaper nw = new Newspaper();
-            if (!_newspaperModel.AddValues(nw, _view.Title, _view.Number, _view.Date))
+            int number = 0;
+            DateTime date = new DateTime();
+            try
             {
-                _view.ShowErrors("Values not correct");
-                return;
+                number = int.Parse(_view.Number);
+                date = DateTime.Parse(_view.Date);
             }
-            _newspapers.Add(nw);
+            catch
+            {
+                _view.ShowErrors("Incorrext argument");
+            }
+
+            _newspaperModel.AddNewspaperToDB(_view.Title, number, date);
+            Show();
         }
 
         public void ShowAllNewspaper(DataGridView grid, List<Newspaper> newspapers)
@@ -85,9 +111,10 @@ namespace Books.Presenter
             for (int i = 0; i < newspapers.Count; i++)
             {
                 grid.Rows.Add();
-                grid.Rows[i].Cells[0].Value = newspapers[i].Title;
-                grid.Rows[i].Cells[1].Value = newspapers[i].Number;
-                grid.Rows[i].Cells[2].Value = newspapers[i].Date;
+                grid.Rows[i].Cells[0].Value = newspapers[i].Id;
+                grid.Rows[i].Cells[1].Value = newspapers[i].Title;
+                grid.Rows[i].Cells[2].Value = newspapers[i].Number;
+                grid.Rows[i].Cells[3].Value = newspapers[i].Date;
             }
         }
 

@@ -2,10 +2,12 @@
 using Books.View;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace Books.Presenter
 {
@@ -59,12 +61,28 @@ namespace Books.Presenter
 
         public void Add()
         {
-
-            Book book = new Book();
             int bookId = _bookModel.AddBookToDB(_view.Title, int.Parse(_view.Year));
             _bookModel.AssignBookToAuthorDB(bookId, _view.Authors.Split(','));
             Show();
         }
+
+        public void SaveToXML()
+        {
+            XmlSerializer sr = new XmlSerializer(typeof(List<Book>));
+            using (FileStream fs = new FileStream("books.xml", FileMode.OpenOrCreate))
+            {
+                sr.Serialize(fs, _bookModel.GetAllBooksFromDb());
+            }
+        }
+
+        public void SaveToFile()
+        {
+            foreach (var item in _bookModel.GetAllBooksFromDb())
+            {
+                _bookModel.AddToFile(item, "Books.txt");
+            }
+        }
+
 
         public void ShowAllBooks( DataGridView grid, List<Book> books)
         {

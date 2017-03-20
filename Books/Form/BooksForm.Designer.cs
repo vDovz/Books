@@ -45,6 +45,8 @@
             this.btnAllBooks = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.btnSaveToXML = new System.Windows.Forms.Button();
+            this.btnSaveToFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.grdBook)).BeginInit();
             this.SuspendLayout();
             // 
@@ -203,11 +205,35 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // btnSaveToXML
+            // 
+            this.btnSaveToXML.Location = new System.Drawing.Point(585, 560);
+            this.btnSaveToXML.Margin = new System.Windows.Forms.Padding(6);
+            this.btnSaveToXML.Name = "btnSaveToXML";
+            this.btnSaveToXML.Size = new System.Drawing.Size(142, 55);
+            this.btnSaveToXML.TabIndex = 21;
+            this.btnSaveToXML.Text = "Save to XML";
+            this.btnSaveToXML.UseVisualStyleBackColor = true;
+            this.btnSaveToXML.Click += new System.EventHandler(this.btnSaveToXML_Click);
+            // 
+            // btnSaveToFile
+            // 
+            this.btnSaveToFile.Location = new System.Drawing.Point(395, 560);
+            this.btnSaveToFile.Margin = new System.Windows.Forms.Padding(6);
+            this.btnSaveToFile.Name = "btnSaveToFile";
+            this.btnSaveToFile.Size = new System.Drawing.Size(142, 55);
+            this.btnSaveToFile.TabIndex = 22;
+            this.btnSaveToFile.Text = "Save to File";
+            this.btnSaveToFile.UseVisualStyleBackColor = true;
+            this.btnSaveToFile.Click += new System.EventHandler(this.btnSaveToFile_Click);
+            // 
             // BooksForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(771, 630);
+            this.Controls.Add(this.btnSaveToFile);
+            this.Controls.Add(this.btnSaveToXML);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnAllBooks);
@@ -250,5 +276,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.Button btnSaveToXML;
+        private System.Windows.Forms.Button btnSaveToFile;
     }
 }

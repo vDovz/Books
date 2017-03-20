@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace Books
 {
+    [Serializable]
     public class Newspaper 
     {
+        public int Id { get; set; }
+
         public string Title { get; set; }
 
         public int Number { get; set; }

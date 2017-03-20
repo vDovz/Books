@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,17 +10,73 @@ namespace Books.Model
 {
     class NewspaperModel
     {
-        public List<Newspaper> FilterByAuthor(List<Newspaper> newspapers, string name)
+        private static string _connectionString = "Data Source = ADMIN-ПК; Initial Catalog = Books; Integrated Security=true;";
+        
+        public List<Newspaper> GetAllNewspapersFromDb()
         {
-            List<Newspaper> result = newspapers.Where((b) => b.Articles.Any((a) => a.Authors.Any((at) => at.Name == name))).ToList();
-            return result;
+            List<Newspaper> result = new List<Newspaper>();
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = @"Select * 
+                                        From Newspapers";
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        result.Add(new Newspaper() { Id = (int)reader[0], Title = (string)reader[1], Number = (int)reader[2], Date = (DateTime)reader[3], Articles = new List<Article>() });
+                    }
+                }
+                return result;
+            }
+        }
+
+        public int AddNewspaperToDB(string title, int number, DateTime date)
+        {
+            int id;
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = string.Format(@"Insert into Newspapers (Title,Number, Date ) output INSERTED.ID
+                                        Values ( '{0}' , {1}, '{2}')", title, number, date);
+                id = (int)command.ExecuteScalar();
+            }
+            return id;
+        }
+
+        public void RemoveNewspaper(int id)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = string.Format(@"Delete From Newspapers 
+                                                      Where Id = " + id);
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+        public void EditNewspaper(int id, string title, int number, DateTime date)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = string.Format(@"Update Newspapers
+                                                      Set Title = '{0}', Number = {1}, Date = '{2}'  
+                                                      Where Id = {3}", title, number, date, id);
+                command.ExecuteNonQuery();
+            }
         }
 
         public void AddToFile(Newspaper newspaper, string path)
         {
             string res = "";
             string articles = "";
-            res += string.Format("{0},{1},{2};", newspaper.Title, newspaper.Number, newspaper.Date);
+            res += string.Format("{0},{1},{2},{3};",newspaper.Id , newspaper.Title, newspaper.Number, newspaper.Date);
             for (int i = 0; i < newspaper.Articles.Count; i++)
             {
                 articles += newspaper.Articles[i].Title + ",";
@@ -41,36 +98,9 @@ namespace Books.Model
             File.AppendAllText(path, res);
         }
 
-        public bool AddValues(Newspaper newspaper, string title, string number, string date)
+        public List<Newspaper> FilterByAuthor(List<Newspaper> newspapers, string name)
         {
-            int num;
-            DateTime d;
-            try
-            {
-                num = int.Parse(number);
-                d = DateTime.Parse(date);
-            }
-            catch (FormatException)
-            {
-                return false;
-            }
-            newspaper.Title = title;
-            newspaper.Number = num;
-            newspaper.Date = d;
-            newspaper.Articles = new List<Article>();
-            return true;
-        }
-
-        public List<Newspaper> GetSomeNewspaper()
-        {
-            List<Newspaper> result = new List<Newspaper>()
-            {
-                new Newspaper() { Title = "TitleName1" , Number = 1 , Date = new DateTime(2017,10,12),Articles = new List<Article>() { new Article() { Authors = new List<Author>() { new Author() { Name = "King"} } } }},
-                new Newspaper() { Title = "TitleName2" , Number = 2 , Date = new DateTime(2017,10,13), Articles = new List<Article>() { new Article() { Authors = new List<Author>() { new Author() { Name = "ng"} } } }},
-                new Newspaper() { Title = "TitleName3" , Number = 3 , Date = new DateTime(2017,10,14), Articles = new List<Article>() { new Article() { Authors = new List<Author>() { new Author() { Name = "in"} } } }},
-                new Newspaper() { Title = "TitleName4" , Number = 4 , Date = new DateTime(2017,10,15), Articles = new List<Article>() { new Article() { Authors = new List<Author>() { new Author() { Name = "Ki"} } } }},
-                new Newspaper() { Title = "TitleName5" , Number = 5 , Date = new DateTime(2017,10,16), Articles = new List<Article>() { new Article() { Authors = new List<Author>() { new Author() { Name = "King"} } } }}
-            };
+            List<Newspaper> result = newspapers.Where((b) => b.Articles.Any((a) => a.Authors.Any((at) => at.Name == name))).ToList();
             return result;
         }
     }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,38 +10,93 @@ namespace Books.Model
 {
     class JournalModel
     {
-        public List<Journal> GetSomeJournals()
+
+        private static string _connectionString = "Data Source = ADMIN-ПК; Initial Catalog = Books; Integrated Security=true;";
+
+        public void AddToFile(Journal journal, string path)
         {
-            List<Journal> result = new List<Journal>()
+            string res = "";
+            string articles = "";
+            res += string.Format("{0},{1},{2},{3},{4};", journal.Id, journal.BrandName,journal.Title, journal.Number, journal.Date);
+            for (int i = 0; i < journal.Articles.Count; i++)
             {
-                new Journal() { BrandName = "BrandName1" , Title = "Theme" , Number = 1 , Date = new DateTime(2016,6,15), Articles = new List<Article>() { new Article() { Authors = new List<Author>() { new Author() { Name = "King"} } } } },
-                new Journal() { BrandName = "BrandName1" , Title = "Theme2" , Number = 2 , Date = new DateTime(2016,6,22),Articles = new List<Article>() { new Article() { Authors = new List<Author>() { new Author() { Name = "as"} } } } },
-                new Journal() { BrandName = "BrandName2" , Title = "Theme12" , Number = 6 , Date = new DateTime(2016,6,28), Articles = new List<Article>() { new Article() { Authors = new List<Author>() { new Author() { Name = "K"} } } } },
-                new Journal() { BrandName = "BrandName123" , Title = "Theme34" , Number = 11 , Date = new DateTime(2016,7,5), Articles = new List<Article>() { new Article() { Authors = new List<Author>() { new Author() { Name = "asd"} } } } },
-                new Journal() { BrandName = "BrandName1345" , Title = "Theme12" , Number = 21 , Date = new DateTime(2016,7,11), Articles = new List<Article>() { new Article() { Authors = new List<Author>() { new Author() { Name = "King"} } } }},
-            };
-            return result;
+                articles += journal.Articles[i].Title + ",";
+                articles += journal.Articles[i].Content + ",";
+                for (int j = 0; j < journal.Articles[i].Authors.Count; j++)
+                {
+                    if (j != journal.Articles[i].Authors.Count - 1)
+                    {
+                        articles += journal.Articles[i].Authors[j].Name = ",";
+                    }
+                    else
+                    {
+                        articles += journal.Articles[i].Authors[j].Name;
+                    }
+                }
+                articles += ";";
+            }
+            res += articles + Environment.NewLine;
+            File.AppendAllText(path, res);
         }
 
-        public bool AddValues(Journal journal, string name, string title, string number, string date)
+        public List<Journal> GetAllJournalsFromDb()
         {
-            int num;
-            DateTime d;
-            try
+            List<Journal> result = new List<Journal>();
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                num = int.Parse(number);
-                d = DateTime.Parse(date);
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = @"Select * 
+                                        From Journals";
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        result.Add(new Journal() { Id = (int)reader[0], BrandName = (string)reader[1], Title = (string)reader[2], Number = (int) reader[3], Date = (DateTime) reader[4], Articles = new List<Article>() });
+                    }
+                }
+                return result;
             }
-            catch (FormatException)
+        }
+
+        public int AddJournalToDB(string brandName, string title, int number, DateTime date)
+        {
+            int id;
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                return false;
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = string.Format(@"Insert into Journals (BrandName,Title,Number, Date ) output INSERTED.ID
+                                        Values ('{0}' , '{1}' , {2}, '{3}')", brandName,title, number, date);
+                id = (int)command.ExecuteScalar();
             }
-            journal.BrandName = name;
-            journal.Title = title;
-            journal.Number = num;
-            journal.Date = d;
-            journal.Articles = new List<Article>();
-            return true;
+            return id;
+        }
+
+        public void RemoveJournal(int id)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = string.Format(@"Delete From Journals 
+                                                      Where Id = " + id);
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+        public void EditJournal(int id, string brandName, string title, int number, DateTime date)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = string.Format(@"Update Journals
+                                                      Set BrandName = '{0}', Title = '{1}', Number = {2}, Date = '{3}'  
+                                                      Where Id = {4}", brandName,title,number, date, id);
+                command.ExecuteNonQuery();
+            }
         }
 
         public List<Journal> FilterByAuthor(List<Journal> journals, string name) 

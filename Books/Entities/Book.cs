@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Books
 {
+    [Serializable]
     public class Book
     {
         public int Id { get; set; }
@@ -16,6 +17,5 @@ namespace Books
         public List<Author> Authors { get; set; }
 
         public int Year { get; set; }
-
     }
 }

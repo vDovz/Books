@@ -110,5 +110,15 @@ namespace Books
         {
             MessageBox.Show(textError);
         }
+
+        private void btnSaveToFile_Click(object sender, EventArgs e)
+        {
+            _presenter.SaveToFile();
+        }
+
+        private void btnSaveToXML_Click(object sender, EventArgs e)
+        {
+            _presenter.SaveToXML();
+        }
     }
 }

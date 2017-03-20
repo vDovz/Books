@@ -86,7 +86,7 @@ namespace Books
 
         private void button1_Click(object sender, EventArgs e)
         {
-            _presenter.Save();
+            _presenter.SaveToFile();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -122,6 +122,11 @@ namespace Books
         public void ShowErrors(string textError)
         {
             MessageBox.Show(textError);
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+            _presenter.SaveToXML();
         }
     }
 }

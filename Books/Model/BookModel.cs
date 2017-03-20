@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace Books.Model
 {
@@ -127,6 +128,23 @@ namespace Books.Model
         {
             List<Book> result = allbooks.Where((b) => b.Authors.Any((a) => a.Name == author)).ToList();
             return result;
+        }
+
+        public void AddToFile(Book book, string path)
+        {
+            string res = "";
+            string authors = "";
+            res += string.Format("{0},{1},{2};",book.Id, book.Title, book.Year);
+            for (int i = 0; i < book.Authors.Count; i++)
+            {
+                authors += book.Authors[i].Name + ",";
+                if (i == book.Authors.Count - 1)
+                {
+                    authors += ";";
+                }  
+            }
+            res += authors + Environment.NewLine;
+            File.AppendAllText(path, res);
         }
 
     }

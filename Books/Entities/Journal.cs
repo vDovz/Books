@@ -6,6 +6,8 @@ namespace Books
     [Serializable]
     public class Journal
     {
+        public int Id { get; set; }
+
         public string BrandName { get; set; }
 
         public string Title { get; set; }

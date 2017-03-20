@@ -32,9 +32,6 @@
             this.btnSearch = new System.Windows.Forms.Button();
             this.txtSearxh = new System.Windows.Forms.TextBox();
             this.grdNewspaper = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtTitle = new System.Windows.Forms.TextBox();
             this.txtDate = new System.Windows.Forms.TextBox();
             this.txtNumber = new System.Windows.Forms.TextBox();
@@ -45,17 +42,22 @@
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnShowAll = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.grdNewspaper)).BeginInit();
             this.SuspendLayout();
             // 
             // btnAddToFile
             // 
-            this.btnAddToFile.Location = new System.Drawing.Point(461, 506);
+            this.btnAddToFile.Location = new System.Drawing.Point(547, 506);
             this.btnAddToFile.Margin = new System.Windows.Forms.Padding(6);
             this.btnAddToFile.Name = "btnAddToFile";
-            this.btnAddToFile.Size = new System.Drawing.Size(141, 55);
+            this.btnAddToFile.Size = new System.Drawing.Size(127, 55);
             this.btnAddToFile.TabIndex = 15;
-            this.btnAddToFile.Text = "Add all to file";
+            this.btnAddToFile.Text = "Save to file";
             this.btnAddToFile.UseVisualStyleBackColor = true;
             this.btnAddToFile.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -82,6 +84,7 @@
             // 
             this.grdNewspaper.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grdNewspaper.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column4,
             this.Column1,
             this.Column2,
             this.Column3});
@@ -90,21 +93,6 @@
             this.grdNewspaper.Name = "grdNewspaper";
             this.grdNewspaper.Size = new System.Drawing.Size(328, 425);
             this.grdNewspaper.TabIndex = 12;
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Title";
-            this.Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Number";
-            this.Column2.Name = "Column2";
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Date";
-            this.Column3.Name = "Column3";
             // 
             // txtTitle
             // 
@@ -195,11 +183,44 @@
             this.btnShowAll.UseVisualStyleBackColor = true;
             this.btnShowAll.Click += new System.EventHandler(this.btnShowAll_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(384, 506);
+            this.button1.Margin = new System.Windows.Forms.Padding(6);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(127, 55);
+            this.button1.TabIndex = 26;
+            this.button1.Text = "Save to XML";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_2);
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "Id";
+            this.Column4.Name = "Column4";
+            this.Column4.Visible = false;
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Title";
+            this.Column1.Name = "Column1";
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Number";
+            this.Column2.Name = "Column2";
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Date";
+            this.Column3.Name = "Column3";
+            // 
             // NewspapersForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(704, 576);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnShowAll);
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnEdit);
@@ -230,9 +251,6 @@
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox txtSearxh;
         private System.Windows.Forms.DataGridView grdNewspaper;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.TextBox txtTitle;
         private System.Windows.Forms.TextBox txtDate;
         private System.Windows.Forms.TextBox txtNumber;
@@ -243,5 +261,10 @@
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Button btnShowAll;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.Button button1;
     }
 }

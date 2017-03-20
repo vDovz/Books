@@ -99,7 +99,7 @@ namespace Books
 
         private void button1_Click(object sender, EventArgs e)
         {
-            _presenter.Save();
+            _presenter.SaveToXML();
         }
 
         private void btSearch_Click(object sender, EventArgs e)
@@ -130,6 +130,10 @@ namespace Books
             MessageBox.Show(textError);
         }
 
+        private void btnSaveToFile_Click(object sender, EventArgs e)
+        {
+            _presenter.SaveToFile();
+        }
     }
 }
 
